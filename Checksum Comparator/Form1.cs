@@ -8,6 +8,10 @@ namespace Checksum_Comparator {
     public partial class Form1 : Form {
         private string[] checksum = new string[10];
 
+        private static readonly int LABEL_TRUE = 0;
+        private static readonly int LABEL_FALSE = 1;
+        private static readonly int LABEL_EMPTY = 2;
+
         public Form1() {
             InitializeComponent();
         }
@@ -24,51 +28,51 @@ namespace Checksum_Comparator {
             if (!(richTextBoxCRC32User.Text == "")
                 && !(richTextBoxCRC32Gen.Text == "")
                 && richTextBoxCRC32User.Text.Equals(richTextBoxCRC32Gen.Text)) {
-                SetFlagLabel(labelCRC32Flag, true);
+                SetFlagLabel(labelCRC32Flag, LABEL_TRUE);
             } else if (richTextBoxCRC32User.Text != "") {
-                SetFlagLabel(labelCRC32Flag, false);
+                SetFlagLabel(labelCRC32Flag, LABEL_FALSE);
             } else {
-                labelCRC32Flag.Text = "";
+                SetFlagLabel(labelCRC32Flag, LABEL_EMPTY);
             }
 
             if (!(richTextBoxCRC64User.Text == "")
                 && !(richTextBoxCRC64Gen.Text == "")
                 && richTextBoxCRC64User.Text.Equals(richTextBoxCRC64Gen.Text)) {
-                SetFlagLabel(labelCRC64Flag, true);
+                SetFlagLabel(labelCRC64Flag, LABEL_TRUE);
             } else if (richTextBoxCRC64User.Text != "") {
-                SetFlagLabel(labelCRC64Flag, false);
+                SetFlagLabel(labelCRC64Flag, LABEL_FALSE);
             } else {
-                labelCRC64Flag.Text = "";
+                SetFlagLabel(labelCRC64Flag, LABEL_EMPTY);
             }
 
             if (!(richTextBoxSHA256User.Text == "")
                 && !(richTextBoxSHA256Gen.Text == "")
                 && richTextBoxSHA256User.Text.Equals(richTextBoxSHA256Gen.Text)) {
-                SetFlagLabel(labelSHA256Flag, true);
+                SetFlagLabel(labelSHA256Flag, LABEL_TRUE);
             } else if (richTextBoxSHA256User.Text != "") {
-                SetFlagLabel(labelSHA256Flag, false);
+                SetFlagLabel(labelSHA256Flag, LABEL_FALSE);
             } else {
-                labelSHA256Flag.Text = "";
+                SetFlagLabel(labelSHA256Flag, LABEL_EMPTY);
             }
 
             if (!(richTextBoxSHA1User.Text == "")
                 && !(richTextBoxSHA1Gen.Text == "")
                 && richTextBoxSHA1User.Text.Equals(richTextBoxSHA1Gen.Text)) {
-                SetFlagLabel(labelSHA1Flag, true);
+                SetFlagLabel(labelSHA1Flag, LABEL_TRUE);
             } else if (richTextBoxSHA1User.Text != "") {
-                SetFlagLabel(labelSHA1Flag, false);
+                SetFlagLabel(labelSHA1Flag, LABEL_FALSE);
             } else {
-                labelSHA1Flag.Text = "";
+                SetFlagLabel(labelSHA1Flag, LABEL_EMPTY);
             }
 
             if (!(richTextBoxBLAKE2spUser.Text == "")
                 && !(richTextBoxBLAKE2spGen.Text == "")
                 && richTextBoxBLAKE2spUser.Text.Equals(richTextBoxBLAKE2spGen.Text)) {
-                SetFlagLabel(labelBLAKE2spFlag, true);
+                SetFlagLabel(labelBLAKE2spFlag, LABEL_TRUE);
             } else if (richTextBoxBLAKE2spUser.Text != "") {
-                SetFlagLabel(labelBLAKE2spFlag, false);
+                SetFlagLabel(labelBLAKE2spFlag, LABEL_FALSE);
             } else {
-                labelBLAKE2spFlag.Text = "";
+                SetFlagLabel(labelBLAKE2spFlag, LABEL_EMPTY);
             }
         }
 
@@ -100,14 +104,16 @@ namespace Checksum_Comparator {
             richTextBoxBLAKE2spGen.Text = checksum[4];
         }
 
-        private void SetFlagLabel(Label label, bool equal) {
-            if (equal) {
+        private void SetFlagLabel(Label label, int flag) {
+            if (flag == 0) {
                 label.ForeColor = Color.Green;
                 label.Text = "=";
 
-            } else {
+            } else if (flag == 1) {
                 label.ForeColor = Color.Red;
                 label.Text = "≠";
+            } else {
+                labelBLAKE2spFlag.Text = "";
             }
         }
 
