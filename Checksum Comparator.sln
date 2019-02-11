@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28531.58
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Checksum Comparator", "Checksum Comparator\Checksum Comparator.csproj", "{F9C9D638-1612-470A-8C75-066D3ECC7AEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9C9D638-1612-470A-8C75-066D3ECC7AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9C9D638-1612-470A-8C75-066D3ECC7AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9C9D638-1612-470A-8C75-066D3ECC7AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9C9D638-1612-470A-8C75-066D3ECC7AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1325441-5C91-4C8E-BE27-59B057915E21}
+	EndGlobalSection
+EndGlobal
