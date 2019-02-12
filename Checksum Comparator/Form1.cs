@@ -40,6 +40,7 @@ namespace Checksum_Comparator {
             SZ.StartInfo.Arguments = "h -scrccrc32 -scrccrc64 -scrcsha256 -scrcsha1 -scrcblake2sp " + "\"" + textBox_FileDir.Text + "\"";
             SZ.StartInfo.RedirectStandardOutput = true;
             SZ.StartInfo.UseShellExecute = false;
+            SZ.StartInfo.CreateNoWindow = true;
             SZ.OutputDataReceived += new DataReceivedEventHandler((s, eve) => {
                 if (!string.IsNullOrEmpty(eve.Data)) {
                     if (lineCount++ == 5) {
