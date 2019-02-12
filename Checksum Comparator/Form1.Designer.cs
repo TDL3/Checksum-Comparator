@@ -57,7 +57,7 @@
             this.labelCRC32Gen = new System.Windows.Forms.Label();
             this.btnCompare = new System.Windows.Forms.Button();
             this.selectFile = new System.Windows.Forms.Button();
-            this.textBox_FileDir = new System.Windows.Forms.TextBox();
+            this.textBoxFileDir = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,7 +90,7 @@
             this.panel1.Controls.Add(this.labelCRC32Gen);
             this.panel1.Controls.Add(this.btnCompare);
             this.panel1.Controls.Add(this.selectFile);
-            this.panel1.Controls.Add(this.textBox_FileDir);
+            this.panel1.Controls.Add(this.textBoxFileDir);
             this.panel1.Location = new System.Drawing.Point(-1, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(802, 368);
@@ -369,15 +369,15 @@
             this.selectFile.UseVisualStyleBackColor = true;
             this.selectFile.Click += new System.EventHandler(this.Button_SelectFile_Click);
             // 
-            // textBox_FileDir
+            // textBoxFileDir
             // 
-            this.textBox_FileDir.AllowDrop = true;
-            this.textBox_FileDir.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_FileDir.Location = new System.Drawing.Point(14, 13);
-            this.textBox_FileDir.Name = "textBox_FileDir";
-            this.textBox_FileDir.Size = new System.Drawing.Size(694, 22);
-            this.textBox_FileDir.TabIndex = 0;
-            this.textBox_FileDir.TextChanged += new System.EventHandler(this.FileDir_Changed);
+            this.textBoxFileDir.AllowDrop = true;
+            this.textBoxFileDir.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxFileDir.Location = new System.Drawing.Point(14, 13);
+            this.textBoxFileDir.Name = "textBoxFileDir";
+            this.textBoxFileDir.Size = new System.Drawing.Size(694, 22);
+            this.textBoxFileDir.TabIndex = 0;
+            this.textBoxFileDir.TextChanged += new System.EventHandler(this.FileDir_Changed);
             // 
             // Form1
             // 
@@ -387,7 +387,7 @@
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Checksum Comparator V1.1.0 By TDL3";
+            this.Text = "Checksum Comparator V1.1.1 By TDL3";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -399,7 +399,7 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button selectFile;
-        private System.Windows.Forms.TextBox textBox_FileDir;
+        private System.Windows.Forms.TextBox textBoxFileDir;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.RichTextBox richTextBoxCRC32Gen;
         private System.Windows.Forms.Label labelCRC32Gen;
