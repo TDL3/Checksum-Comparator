@@ -103,6 +103,7 @@
             this.richTextBoxBLAKE2spUser.Location = new System.Drawing.Point(413, 326);
             this.richTextBoxBLAKE2spUser.Multiline = false;
             this.richTextBoxBLAKE2spUser.Name = "richTextBoxBLAKE2spUser";
+            this.richTextBoxBLAKE2spUser.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxBLAKE2spUser.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxBLAKE2spUser.TabIndex = 41;
             this.richTextBoxBLAKE2spUser.Text = "";
@@ -113,6 +114,7 @@
             this.richTextBoxSHA1User.Location = new System.Drawing.Point(413, 274);
             this.richTextBoxSHA1User.Multiline = false;
             this.richTextBoxSHA1User.Name = "richTextBoxSHA1User";
+            this.richTextBoxSHA1User.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxSHA1User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxSHA1User.TabIndex = 40;
             this.richTextBoxSHA1User.Text = "";
@@ -123,6 +125,7 @@
             this.richTextBoxSHA256User.Location = new System.Drawing.Point(413, 227);
             this.richTextBoxSHA256User.Multiline = false;
             this.richTextBoxSHA256User.Name = "richTextBoxSHA256User";
+            this.richTextBoxSHA256User.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxSHA256User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxSHA256User.TabIndex = 39;
             this.richTextBoxSHA256User.Text = "";
@@ -133,16 +136,18 @@
             this.richTextBoxCRC64User.Location = new System.Drawing.Point(413, 174);
             this.richTextBoxCRC64User.Multiline = false;
             this.richTextBoxCRC64User.Name = "richTextBoxCRC64User";
+            this.richTextBoxCRC64User.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxCRC64User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxCRC64User.TabIndex = 38;
             this.richTextBoxCRC64User.Text = "";
             // 
             // richTextBoxCRC32User
             // 
-            this.richTextBoxCRC32User.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxCRC32User.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.richTextBoxCRC32User.Location = new System.Drawing.Point(413, 120);
             this.richTextBoxCRC32User.Multiline = false;
             this.richTextBoxCRC32User.Name = "richTextBoxCRC32User";
+            this.richTextBoxCRC32User.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxCRC32User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxCRC32User.TabIndex = 37;
             this.richTextBoxCRC32User.Text = "";
@@ -244,6 +249,7 @@
             this.richTextBoxBLAKE2spGen.Multiline = false;
             this.richTextBoxBLAKE2spGen.Name = "richTextBoxBLAKE2spGen";
             this.richTextBoxBLAKE2spGen.ReadOnly = true;
+            this.richTextBoxBLAKE2spGen.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxBLAKE2spGen.Size = new System.Drawing.Size(358, 27);
             this.richTextBoxBLAKE2spGen.TabIndex = 12;
             this.richTextBoxBLAKE2spGen.Text = "";
@@ -264,6 +270,7 @@
             this.richTextBoxSHA1Gen.Multiline = false;
             this.richTextBoxSHA1Gen.Name = "richTextBoxSHA1Gen";
             this.richTextBoxSHA1Gen.ReadOnly = true;
+            this.richTextBoxSHA1Gen.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxSHA1Gen.Size = new System.Drawing.Size(358, 27);
             this.richTextBoxSHA1Gen.TabIndex = 10;
             this.richTextBoxSHA1Gen.Text = "";
@@ -284,6 +291,7 @@
             this.richTextBoxSHA256Gen.Multiline = false;
             this.richTextBoxSHA256Gen.Name = "richTextBoxSHA256Gen";
             this.richTextBoxSHA256Gen.ReadOnly = true;
+            this.richTextBoxSHA256Gen.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxSHA256Gen.Size = new System.Drawing.Size(358, 27);
             this.richTextBoxSHA256Gen.TabIndex = 8;
             this.richTextBoxSHA256Gen.Text = "";
@@ -304,6 +312,7 @@
             this.richTextBoxCRC64Gen.Multiline = false;
             this.richTextBoxCRC64Gen.Name = "richTextBoxCRC64Gen";
             this.richTextBoxCRC64Gen.ReadOnly = true;
+            this.richTextBoxCRC64Gen.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxCRC64Gen.Size = new System.Drawing.Size(358, 27);
             this.richTextBoxCRC64Gen.TabIndex = 6;
             this.richTextBoxCRC64Gen.Text = "";
@@ -324,6 +333,7 @@
             this.richTextBoxCRC32Gen.Multiline = false;
             this.richTextBoxCRC32Gen.Name = "richTextBoxCRC32Gen";
             this.richTextBoxCRC32Gen.ReadOnly = true;
+            this.richTextBoxCRC32Gen.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxCRC32Gen.Size = new System.Drawing.Size(358, 27);
             this.richTextBoxCRC32Gen.TabIndex = 4;
             this.richTextBoxCRC32Gen.Text = "";
@@ -377,7 +387,7 @@
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Checksum Comparator V1.0.0 By TDL3";
+            this.Text = "Checksum Comparator V1.1.0 By TDL3";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

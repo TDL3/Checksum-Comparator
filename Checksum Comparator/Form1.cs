@@ -24,56 +24,11 @@ namespace Checksum_Comparator {
         }
 
         private void Button_Compare_Click(object sender, EventArgs e) {
-            SetChecksumGen();
-            if (!(richTextBoxCRC32User.Text == "")
-                && !(richTextBoxCRC32Gen.Text == "")
-                && richTextBoxCRC32User.Text.Equals(richTextBoxCRC32Gen.Text)) {
-                SetFlagLabel(labelCRC32Flag, LABEL_TRUE);
-            } else if (richTextBoxCRC32User.Text != "") {
-                SetFlagLabel(labelCRC32Flag, LABEL_FALSE);
-            } else {
-                SetFlagLabel(labelCRC32Flag, LABEL_EMPTY);
-            }
-
-            if (!(richTextBoxCRC64User.Text == "")
-                && !(richTextBoxCRC64Gen.Text == "")
-                && richTextBoxCRC64User.Text.Equals(richTextBoxCRC64Gen.Text)) {
-                SetFlagLabel(labelCRC64Flag, LABEL_TRUE);
-            } else if (richTextBoxCRC64User.Text != "") {
-                SetFlagLabel(labelCRC64Flag, LABEL_FALSE);
-            } else {
-                SetFlagLabel(labelCRC64Flag, LABEL_EMPTY);
-            }
-
-            if (!(richTextBoxSHA256User.Text == "")
-                && !(richTextBoxSHA256Gen.Text == "")
-                && richTextBoxSHA256User.Text.Equals(richTextBoxSHA256Gen.Text)) {
-                SetFlagLabel(labelSHA256Flag, LABEL_TRUE);
-            } else if (richTextBoxSHA256User.Text != "") {
-                SetFlagLabel(labelSHA256Flag, LABEL_FALSE);
-            } else {
-                SetFlagLabel(labelSHA256Flag, LABEL_EMPTY);
-            }
-
-            if (!(richTextBoxSHA1User.Text == "")
-                && !(richTextBoxSHA1Gen.Text == "")
-                && richTextBoxSHA1User.Text.Equals(richTextBoxSHA1Gen.Text)) {
-                SetFlagLabel(labelSHA1Flag, LABEL_TRUE);
-            } else if (richTextBoxSHA1User.Text != "") {
-                SetFlagLabel(labelSHA1Flag, LABEL_FALSE);
-            } else {
-                SetFlagLabel(labelSHA1Flag, LABEL_EMPTY);
-            }
-
-            if (!(richTextBoxBLAKE2spUser.Text == "")
-                && !(richTextBoxBLAKE2spGen.Text == "")
-                && richTextBoxBLAKE2spUser.Text.Equals(richTextBoxBLAKE2spGen.Text)) {
-                SetFlagLabel(labelBLAKE2spFlag, LABEL_TRUE);
-            } else if (richTextBoxBLAKE2spUser.Text != "") {
-                SetFlagLabel(labelBLAKE2spFlag, LABEL_FALSE);
-            } else {
-                SetFlagLabel(labelBLAKE2spFlag, LABEL_EMPTY);
-            }
+            CompareGenAndUserText(richTextBoxCRC32Gen, richTextBoxCRC32User, labelCRC32Flag);
+            CompareGenAndUserText(richTextBoxCRC64Gen, richTextBoxCRC64User, labelCRC64Flag);
+            CompareGenAndUserText(richTextBoxSHA256Gen, richTextBoxSHA256User, labelSHA256Flag);
+            CompareGenAndUserText(richTextBoxSHA1Gen, richTextBoxSHA1User, labelSHA1Flag);
+            CompareGenAndUserText(richTextBoxBLAKE2spGen, richTextBoxBLAKE2spUser, labelBLAKE2spFlag);
         }
 
         private void FileDir_Changed(object sender, EventArgs e) {
@@ -89,6 +44,7 @@ namespace Checksum_Comparator {
                 if (!string.IsNullOrEmpty(eve.Data)) {
                     if (lineCount++ == 5) {
                         checksum = eve.Data.Split(' ');
+                        SetChecksumInfoGen();
                     }
                 }
             });
@@ -96,12 +52,34 @@ namespace Checksum_Comparator {
             SZ.BeginOutputReadLine();
             SZ.WaitForExit();
         }
-        private void SetChecksumGen() {
-            richTextBoxCRC32Gen.Text = checksum[0];
-            richTextBoxCRC64Gen.Text = checksum[1];
-            richTextBoxSHA256Gen.Text = checksum[2];
-            richTextBoxSHA1Gen.Text = checksum[3];
-            richTextBoxBLAKE2spGen.Text = checksum[4];
+        private void SetChecksumInfoGen() {
+            if (InvokeRequired) {
+                richTextBoxCRC32Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC32Gen.Text =  checksum[0]; }));
+                richTextBoxCRC64Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC64Gen.Text = checksum[1]; }));
+                richTextBoxSHA256Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA256Gen.Text = checksum[2]; }));
+                richTextBoxSHA1Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA1Gen.Text = checksum[3]; }));
+                richTextBoxBLAKE2spGen.BeginInvoke(new MethodInvoker(delegate { richTextBoxBLAKE2spGen.Text = checksum[4]; }));
+            }
+        }
+
+        private void CompareGenAndUserText(RichTextBox richTextBoxGen, RichTextBox richTextBoxUser, Label flagLabel) {
+            string str1 = richTextBoxGen.Text;
+            string str2 = richTextBoxUser.Text;
+            if (str1 != "" && str2 != "") {
+                for (int i = 0; i < str1.Length && i < str2.Length; i++) {
+                    if (str1[i] != str2[i]) {
+                        richTextBoxUser.Select(i, 1);
+                        richTextBoxUser.SelectionColor = Color.Red;
+                        SetFlagLabel(flagLabel, LABEL_FALSE);
+                    } else {
+                        richTextBoxUser.Select(i, 1);
+                        richTextBoxUser.SelectionColor = Color.Green;
+                        SetFlagLabel(flagLabel, LABEL_TRUE);
+                    }
+                }
+            } else {
+                SetFlagLabel(flagLabel, LABEL_EMPTY);
+            }
         }
 
         private void SetFlagLabel(Label label, int flag) {
