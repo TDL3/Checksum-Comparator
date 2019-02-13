@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Checksum Comparator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Yet another checksum comparison tool")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("TDL3.worldpress.com")]
 [assembly: AssemblyProduct("Checksum Comparator")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © TDL3 2019")]
+[assembly: AssemblyTrademark("TDL3.worldpress.com")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
