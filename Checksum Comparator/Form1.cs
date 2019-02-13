@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -48,7 +49,6 @@ namespace Checksum_Comparator {
         /// Start 7-zip to get specified file's hash infos.
         /// </summary>
         private void FileDir_Changed(object sender, EventArgs e) {
-            //TODO: Make filrDir drag n dropable
             if (File.Exists(textBoxFileDir.Text)) {
                 StringBuilder output = new StringBuilder();
                 int lineCount = 0;
@@ -133,13 +133,23 @@ namespace Checksum_Comparator {
                 labelBLAKE2spFlag.Text = "";
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e) {
-
+        /// <summary>
+        /// Handles FileDir drag'n'drop event.
+        /// </summary>
+        private void FileDirDragOver(object sender, DragEventArgs e) {
+            //check if file dropped is valid.
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
         }
-
-        private void Panel1_Paint(object sender, PaintEventArgs e) {
-
+        /// <summary>
+        /// Handles FileDir drag'n'drop event.
+        /// </summary>
+        private void FileDirDragDrop(object sender, DragEventArgs e) {
+            // get all files droppeds and select first one 
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
+                textBoxFileDir.Text = files.First(); 
         }
     }
 }

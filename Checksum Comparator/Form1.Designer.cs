@@ -1,4 +1,7 @@
-﻿namespace Checksum_Comparator
+﻿using System;
+using System.Windows.Forms;
+
+namespace Checksum_Comparator
 {
     partial class Form1
     {
@@ -95,7 +98,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(802, 368);
             this.panel1.TabIndex = 0;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.Panel1_Paint);
             // 
             // richTextBoxBLAKE2spUser
             // 
@@ -378,6 +380,8 @@
             this.textBoxFileDir.Size = new System.Drawing.Size(694, 22);
             this.textBoxFileDir.TabIndex = 0;
             this.textBoxFileDir.TextChanged += new System.EventHandler(this.FileDir_Changed);
+            this.textBoxFileDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.FileDirDragDrop);
+            this.textBoxFileDir.DragOver += new System.Windows.Forms.DragEventHandler(this.FileDirDragOver);
             // 
             // Form1
             // 
@@ -388,7 +392,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Checksum Comparator V1.1.1 By TDL3";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
