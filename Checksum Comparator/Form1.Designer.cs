@@ -58,14 +58,17 @@ namespace Checksum_Comparator
             this.labelCRC64Gen = new System.Windows.Forms.Label();
             this.richTextBoxCRC32Gen = new System.Windows.Forms.RichTextBox();
             this.labelCRC32Gen = new System.Windows.Forms.Label();
-            this.btnCompare = new System.Windows.Forms.Button();
             this.selectFile = new System.Windows.Forms.Button();
             this.textBoxFileDir = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.richTextBoxBLAKE2spUser);
             this.panel1.Controls.Add(this.richTextBoxSHA1User);
             this.panel1.Controls.Add(this.richTextBoxSHA256User);
@@ -91,7 +94,6 @@ namespace Checksum_Comparator
             this.panel1.Controls.Add(this.labelCRC64Gen);
             this.panel1.Controls.Add(this.richTextBoxCRC32Gen);
             this.panel1.Controls.Add(this.labelCRC32Gen);
-            this.panel1.Controls.Add(this.btnCompare);
             this.panel1.Controls.Add(this.selectFile);
             this.panel1.Controls.Add(this.textBoxFileDir);
             this.panel1.Location = new System.Drawing.Point(-1, 0);
@@ -109,6 +111,7 @@ namespace Checksum_Comparator
             this.richTextBoxBLAKE2spUser.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxBLAKE2spUser.TabIndex = 41;
             this.richTextBoxBLAKE2spUser.Text = "";
+            this.richTextBoxBLAKE2spUser.TextChanged += new System.EventHandler(this.RichTextBoxUserTextChanged);
             // 
             // richTextBoxSHA1User
             // 
@@ -120,6 +123,7 @@ namespace Checksum_Comparator
             this.richTextBoxSHA1User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxSHA1User.TabIndex = 40;
             this.richTextBoxSHA1User.Text = "";
+            this.richTextBoxSHA1User.TextChanged += new System.EventHandler(this.RichTextBoxUserTextChanged);
             // 
             // richTextBoxSHA256User
             // 
@@ -131,6 +135,7 @@ namespace Checksum_Comparator
             this.richTextBoxSHA256User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxSHA256User.TabIndex = 39;
             this.richTextBoxSHA256User.Text = "";
+            this.richTextBoxSHA256User.TextChanged += new System.EventHandler(this.RichTextBoxUserTextChanged);
             // 
             // richTextBoxCRC64User
             // 
@@ -142,6 +147,7 @@ namespace Checksum_Comparator
             this.richTextBoxCRC64User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxCRC64User.TabIndex = 38;
             this.richTextBoxCRC64User.Text = "";
+            this.richTextBoxCRC64User.TextChanged += new System.EventHandler(this.RichTextBoxUserTextChanged);
             // 
             // richTextBoxCRC32User
             // 
@@ -153,6 +159,7 @@ namespace Checksum_Comparator
             this.richTextBoxCRC32User.Size = new System.Drawing.Size(376, 27);
             this.richTextBoxCRC32User.TabIndex = 37;
             this.richTextBoxCRC32User.Text = "";
+            this.richTextBoxCRC32User.TextChanged += new System.EventHandler(this.RichTextBoxUserTextChanged);
             // 
             // labelBLAKE2spFlag
             // 
@@ -349,17 +356,6 @@ namespace Checksum_Comparator
             this.labelCRC32Gen.TabIndex = 3;
             this.labelCRC32Gen.Text = "CRC32";
             // 
-            // btnCompare
-            // 
-            this.btnCompare.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCompare.Location = new System.Drawing.Point(14, 41);
-            this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(775, 56);
-            this.btnCompare.TabIndex = 2;
-            this.btnCompare.Text = "Compare";
-            this.btnCompare.UseVisualStyleBackColor = true;
-            this.btnCompare.Click += new System.EventHandler(this.Button_Compare_Click);
-            // 
             // selectFile
             // 
             this.selectFile.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -379,9 +375,30 @@ namespace Checksum_Comparator
             this.textBoxFileDir.Name = "textBoxFileDir";
             this.textBoxFileDir.Size = new System.Drawing.Size(694, 22);
             this.textBoxFileDir.TabIndex = 0;
+            this.textBoxFileDir.Text = "Select a file or drag one on to here";
             this.textBoxFileDir.TextChanged += new System.EventHandler(this.FileDir_Changed);
             this.textBoxFileDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.FileDirDragDrop);
             this.textBoxFileDir.DragOver += new System.Windows.Forms.DragEventHandler(this.FileDirDragOver);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 58);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(115, 30);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Calculated";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(408, 58);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 30);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Given";
             // 
             // Form1
             // 
@@ -391,7 +408,8 @@ namespace Checksum_Comparator
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Checksum Comparator V1.1.1 By TDL3";
+            this.Text = "Checksum Comparator V1.1.2 By TDL3";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -403,7 +421,6 @@ namespace Checksum_Comparator
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button selectFile;
         private System.Windows.Forms.TextBox textBoxFileDir;
-        private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.RichTextBox richTextBoxCRC32Gen;
         private System.Windows.Forms.Label labelCRC32Gen;
         private System.Windows.Forms.RichTextBox richTextBoxBLAKE2spGen;
@@ -429,6 +446,8 @@ namespace Checksum_Comparator
         private System.Windows.Forms.RichTextBox richTextBoxSHA256User;
         private System.Windows.Forms.RichTextBox richTextBoxCRC64User;
         private System.Windows.Forms.RichTextBox richTextBoxCRC32User;
+        private Label label2;
+        private Label label1;
     }
 }
 

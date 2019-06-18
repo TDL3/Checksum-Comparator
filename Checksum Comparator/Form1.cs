@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Checksum_Comparator {
@@ -14,14 +15,13 @@ namespace Checksum_Comparator {
         //checksum[2] stores SHA256.
         //checksum[3] stores SHA1.
         //checksum[4] stores BLAKE2sp.
-        private string[] checksum = new string[10];
+        private string[] _checksum = new string[10];
         //FlagLabel indicates whether 7-zip generated hashes and user given ones are same.
-        //FlagLabel equal.
-        private static readonly int LABEL_TRUE = 0;
-        //FlagLabel not equal.
-        private static readonly int LABEL_FALSE = 1;
-        //FlagLabel empty.
-        private static readonly int LABEL_EMPTY = 2;
+        private enum LabelStatus {
+            Equal,
+            NonEqual,
+            Clear
+        }
 
         public Form1() {
             InitializeComponent();
@@ -49,42 +49,48 @@ namespace Checksum_Comparator {
         /// Start 7-zip to get specified file's hash infos.
         /// </summary>
         private void FileDir_Changed(object sender, EventArgs e) {
-            if (File.Exists(textBoxFileDir.Text)) {
-                StringBuilder output = new StringBuilder();
-                int lineCount = 0;
-                Process SZ = new Process(); //SZ = 7-zip
-                SZ.StartInfo.FileName = "7z.exe";
-                SZ.StartInfo.Arguments = "h -scrccrc32 -scrccrc64 -scrcsha256 -scrcsha1 -scrcblake2sp " + "\"" + textBoxFileDir.Text + "\"";
-                SZ.StartInfo.RedirectStandardOutput = true;
-                SZ.StartInfo.UseShellExecute = false;
-                SZ.StartInfo.CreateNoWindow = true;
-                SZ.OutputDataReceived += new DataReceivedEventHandler((s, eve) => {
-                    if (!string.IsNullOrEmpty(eve.Data)) {
-                        //start from 0, 5th line is where all hash infos returned. 
-                        if (lineCount++ == 5) {
-                            //hash infos are seperated by white spaces
-                            checksum = eve.Data.Split(' ');
-                            SetChecksumInfoGen();
-                        }
-                    }
-                });
-                SZ.Start();
-                SZ.BeginOutputReadLine();
-                SZ.WaitForExit();
-            }
+            if (!File.Exists(textBoxFileDir.Text)) return;
+            GetChecksumFromZip();
+        }
+
+        private void GetChecksumFromZip() {
+            var lineCount = 0;
+
+            var sevenZip = new Process {
+                StartInfo =
+                {
+                    FileName = "7z.exe",
+                    Arguments = "h -scrccrc32 -scrccrc64 -scrcsha256 -scrcsha1 -scrcblake2sp " + "\"" +
+                                textBoxFileDir.Text + "\"",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+
+                }
+            }; //SZ = 7-zip
+            sevenZip.OutputDataReceived += new DataReceivedEventHandler((s, eve) => {
+                if (string.IsNullOrEmpty(eve.Data)) return;
+                //start from 0, 5th line is where all hash infos returned. 
+                if (lineCount++ != 5) return;
+                //hash infos are separated by white spaces
+                _checksum = eve.Data.Split(' ');
+                SetChecksumInfoGen();
+            });
+            sevenZip.Start();
+            sevenZip.BeginOutputReadLine();
+            sevenZip.WaitForExit();
         }
         /// <summary>
         /// Update hashes to corresponding RichTextBoxes.
         /// </summary>
         private void SetChecksumInfoGen() {
-            if (InvokeRequired) {
-                //uppdate GUI thread from a sub-process, MethodInvoker is needed
-                richTextBoxCRC32Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC32Gen.Text = checksum[0]; }));
-                richTextBoxCRC64Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC64Gen.Text = checksum[1]; }));
-                richTextBoxSHA256Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA256Gen.Text = checksum[2]; }));
-                richTextBoxSHA1Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA1Gen.Text = checksum[3]; }));
-                richTextBoxBLAKE2spGen.BeginInvoke(new MethodInvoker(delegate { richTextBoxBLAKE2spGen.Text = checksum[4]; }));
-            }
+            if (!InvokeRequired) return;
+            //Update GUI thread from a sub-process, MethodInvoker is needed
+            richTextBoxCRC32Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC32Gen.Text = _checksum[0]; }));
+            richTextBoxCRC64Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxCRC64Gen.Text = _checksum[1]; }));
+            richTextBoxSHA256Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA256Gen.Text = _checksum[2]; }));
+            richTextBoxSHA1Gen.BeginInvoke(new MethodInvoker(delegate { richTextBoxSHA1Gen.Text = _checksum[3]; }));
+            richTextBoxBLAKE2spGen.BeginInvoke(new MethodInvoker(delegate { richTextBoxBLAKE2spGen.Text = _checksum[4]; }));
         }
         /// <summary>
         /// Compare 7-zip generated hashes and user given ones.
@@ -92,27 +98,29 @@ namespace Checksum_Comparator {
         /// <param name="richTextBoxGen"> 7-zip generated hash. </param>
         /// <param name="richTextBoxUser"> User given hash. </param>
         /// <param name="flagLabel"> Flaglabel. </param>
-        private void CompareGenAndUserText(RichTextBox richTextBoxGen, RichTextBox richTextBoxUser, Label flagLabel) {
-            bool flag = true;
-            string str1 = richTextBoxGen.Text;
-            string str2 = richTextBoxUser.Text;
+        private void CompareGenAndUserText(Control richTextBoxGen, RichTextBox richTextBoxUser, Control flagLabel) {
+            var flag = true;
+            var str1 = richTextBoxGen.Text;
+            var str2 = richTextBoxUser.Text;
             if (!string.IsNullOrEmpty(str1) && !string.IsNullOrEmpty(str2)) {
-                for (int i = 0; i < str1.Length && i < str2.Length; i++) {
+                for (var i = 0; i < str1.Length && i < str2.Length; i++) {
                     //if a char in str1 not maths corresponding one in str2, select that char in richTextBoxUser, highlight it in red.
                     if (str1[i] != str2[i]) {
                         richTextBoxUser.Select(i, 1);
                         richTextBoxUser.SelectionColor = Color.Red;
-                        SetFlagLabel(flagLabel, LABEL_FALSE);
+                        richTextBoxUser.Select(str2.Length, 0);
+                        SetFlagLabel(flagLabel, LabelStatus.NonEqual);
                         flag = false;
                     } else {
                         //highlight it in green.
                         richTextBoxUser.Select(i, 1);
                         richTextBoxUser.SelectionColor = Color.Green;
-                        if (flag) { SetFlagLabel(flagLabel, LABEL_TRUE); };
+                        richTextBoxUser.Select(str2.Length, 0);
+                        if (flag) { SetFlagLabel(flagLabel, LabelStatus.Equal); };
                     }
                 }
             } else {
-                SetFlagLabel(flagLabel, LABEL_EMPTY);
+                SetFlagLabel(flagLabel, LabelStatus.Clear);
             }
 
         }
@@ -121,16 +129,21 @@ namespace Checksum_Comparator {
         /// </summary>
         /// <param name="label"> Flaglabel to change. </param>
         /// <param name="flag"> Can only be following three: LABEL_TRUE LABEL_FALSE LABEL_EMPTY. </param>
-        private void SetFlagLabel(Label label, int flag) {
-            if (flag == LABEL_TRUE) {
+        private void SetFlagLabel(Control label, LabelStatus flag) {
+            switch (flag) {
+                case LabelStatus.Equal:
                 label.ForeColor = Color.Green;
                 label.Text = "=";
-
-            } else if (flag == LABEL_FALSE) {
+                break;
+                case LabelStatus.NonEqual:
                 label.ForeColor = Color.Red;
                 label.Text = "≠";
-            } else {
+                break;
+                case LabelStatus.Clear:
                 labelBLAKE2spFlag.Text = "";
+                break;
+                default:
+                break;
             }
         }
         /// <summary>
@@ -138,10 +151,9 @@ namespace Checksum_Comparator {
         /// </summary>
         private void FileDirDragOver(object sender, DragEventArgs e) {
             //check if file dropped is valid.
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Link;
-            else
-                e.Effect = DragDropEffects.None;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop)
+                ? DragDropEffects.Link
+                : DragDropEffects.None;
         }
         /// <summary>
         /// Handles FileDir drag'n'drop event.
@@ -149,7 +161,25 @@ namespace Checksum_Comparator {
         private void FileDirDragDrop(object sender, DragEventArgs e) {
             // get all files droppeds and select first one 
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
-                textBoxFileDir.Text = files.First(); 
+                textBoxFileDir.Text = files.First();
+        }
+
+        private void RichTextBoxUserTextChanged(object sender, EventArgs e) {
+            if (sender.Equals(richTextBoxCRC32User)) {
+                CompareGenAndUserText(richTextBoxCRC32Gen, richTextBoxCRC32User, labelCRC32Flag);
+            } else if (sender.Equals(richTextBoxCRC64User)) {
+                CompareGenAndUserText(richTextBoxCRC64Gen, richTextBoxCRC64User, labelCRC64Flag);
+            } else if (sender.Equals(richTextBoxSHA256User)) {
+                CompareGenAndUserText(richTextBoxSHA256Gen, richTextBoxSHA256User, labelSHA256Flag);
+            } else if (sender.Equals(richTextBoxSHA1User)) {
+                CompareGenAndUserText(richTextBoxSHA1Gen, richTextBoxSHA1User, labelSHA1Flag);
+            } else if (sender.Equals(richTextBoxBLAKE2spUser)) {
+                CompareGenAndUserText(richTextBoxBLAKE2spGen, richTextBoxBLAKE2spUser, labelBLAKE2spFlag);
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e) {
+
         }
     }
 }
