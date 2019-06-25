@@ -16,6 +16,11 @@ namespace Checksum_Comparator {
         //checksum[3] stores SHA1.
         //checksum[4] stores BLAKE2sp.
         private string[] _checksum = new string[10];
+        //7zip process encaped in a thread, the purpose is to make ui thread responsive while 7zip doing its things, 
+        //it's likely a very stupid approach, but it works
+        private Thread _sevenZip;
+        //7zip process
+        private Process _p;
         //FlagLabel indicates whether 7-zip generated hashes and user given ones are same.
         private enum LabelStatus {
             Equal,
@@ -36,27 +41,21 @@ namespace Checksum_Comparator {
             }
         }
         /// <summary>
-        /// Compares 7-zip generated hash infos and user given ones, if they both not empty.
-        /// </summary>
-        private void Button_Compare_Click(object sender, EventArgs e) {
-            CompareGenAndUserText(richTextBoxCRC32Gen, richTextBoxCRC32User, labelCRC32Flag);
-            CompareGenAndUserText(richTextBoxCRC64Gen, richTextBoxCRC64User, labelCRC64Flag);
-            CompareGenAndUserText(richTextBoxSHA256Gen, richTextBoxSHA256User, labelSHA256Flag);
-            CompareGenAndUserText(richTextBoxSHA1Gen, richTextBoxSHA1User, labelSHA1Flag);
-            CompareGenAndUserText(richTextBoxBLAKE2spGen, richTextBoxBLAKE2spUser, labelBLAKE2spFlag);
-        }
-        /// <summary>
         /// Start 7-zip to get specified file's hash infos.
         /// </summary>
         private void FileDir_Changed(object sender, EventArgs e) {
             if (!File.Exists(textBoxFileDir.Text)) return;
-            GetChecksumFromZip();
+            GetChecksumFrom7Zip();
         }
 
-        private void GetChecksumFromZip() {
+        private void GetChecksumFrom7Zip() {
+            //make sure prior 7zip process has exited
+            if (_sevenZip != null) {
+                MessageBox.Show(@"Calculations of current the file are not completed yet", @"OOPS");
+                return;
+            }
             var lineCount = 0;
-
-            var sevenZip = new Process {
+            _p = new Process {
                 StartInfo =
                 {
                     FileName = "7z.exe",
@@ -66,19 +65,36 @@ namespace Checksum_Comparator {
                     UseShellExecute = false,
                     CreateNoWindow = true
 
-                }
-            }; //SZ = 7-zip
-            sevenZip.OutputDataReceived += new DataReceivedEventHandler((s, eve) => {
+        }
+            };
+            _p.Exited += (s, eve) => {
+                progressBarSevenZip.BeginInvoke(
+                    new MethodInvoker(delegate {
+                        progressBarSevenZip.Style = ProgressBarStyle.Continuous;
+                        progressBarSevenZip.MarqueeAnimationSpeed = 0;
+                    }));
+                _sevenZip = null;
+            };
+            _p.OutputDataReceived += (s, eve) => {
                 if (string.IsNullOrEmpty(eve.Data)) return;
                 //start from 0, 5th line is where all hash infos returned. 
                 if (lineCount++ != 5) return;
                 //hash infos are separated by white spaces
                 _checksum = eve.Data.Split(' ');
                 SetChecksumInfoGen();
-            });
-            sevenZip.Start();
-            sevenZip.BeginOutputReadLine();
-            sevenZip.WaitForExit();
+            };
+            _sevenZip = new Thread((() => {
+                _p.Start();
+                _p.BeginOutputReadLine();
+                _p.EnableRaisingEvents = true;
+                //p.WaitForExit();
+            }));
+            _sevenZip.Start();
+            progressBarSevenZip.BeginInvoke(
+                new MethodInvoker(delegate {
+                    progressBarSevenZip.Style = ProgressBarStyle.Marquee;
+                    progressBarSevenZip.MarqueeAnimationSpeed = 10;
+                }));
         }
         /// <summary>
         /// Update hashes to corresponding RichTextBoxes.
@@ -116,7 +132,7 @@ namespace Checksum_Comparator {
                         richTextBoxUser.Select(i, 1);
                         richTextBoxUser.SelectionColor = Color.Green;
                         richTextBoxUser.Select(str2.Length, 0);
-                        if (flag) { SetFlagLabel(flagLabel, LabelStatus.Equal); };
+                        if (flag) { SetFlagLabel(flagLabel, LabelStatus.Equal); }
                     }
                 }
             } else {
@@ -133,16 +149,14 @@ namespace Checksum_Comparator {
             switch (flag) {
                 case LabelStatus.Equal:
                 label.ForeColor = Color.Green;
-                label.Text = "=";
+                label.Text = @"=";
                 break;
                 case LabelStatus.NonEqual:
                 label.ForeColor = Color.Red;
-                label.Text = "≠";
+                label.Text = @"≠";
                 break;
                 case LabelStatus.Clear:
-                labelBLAKE2spFlag.Text = "";
-                break;
-                default:
+                labelBLAKE2spFlag.Text = @"";
                 break;
             }
         }
@@ -159,7 +173,7 @@ namespace Checksum_Comparator {
         /// Handles FileDir drag'n'drop event.
         /// </summary>
         private void FileDirDragDrop(object sender, DragEventArgs e) {
-            // get all files droppeds and select first one 
+            // get all files dropped and select the first one 
             if (e.Data.GetData(DataFormats.FileDrop) is string[] files && files.Any())
                 textBoxFileDir.Text = files.First();
         }
@@ -178,7 +192,11 @@ namespace Checksum_Comparator {
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e) {
+
+        private void OnClosing(object sender, FormClosingEventArgs e) {
+            if (_p == null ||_p.HasExited) return;
+            _p.CancelOutputRead();
+            _p.Kill();
 
         }
     }

@@ -33,6 +33,8 @@ namespace Checksum_Comparator
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.richTextBoxBLAKE2spUser = new System.Windows.Forms.RichTextBox();
             this.richTextBoxSHA1User = new System.Windows.Forms.RichTextBox();
             this.richTextBoxSHA256User = new System.Windows.Forms.RichTextBox();
@@ -60,13 +62,13 @@ namespace Checksum_Comparator
             this.labelCRC32Gen = new System.Windows.Forms.Label();
             this.selectFile = new System.Windows.Forms.Button();
             this.textBoxFileDir = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.progressBarSevenZip = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.progressBarSevenZip);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.richTextBoxBLAKE2spUser);
@@ -98,8 +100,28 @@ namespace Checksum_Comparator
             this.panel1.Controls.Add(this.textBoxFileDir);
             this.panel1.Location = new System.Drawing.Point(-1, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(802, 368);
+            this.panel1.Size = new System.Drawing.Size(802, 395);
             this.panel1.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(408, 58);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(69, 30);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Given";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(13, 58);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(115, 30);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Calculated";
             // 
             // richTextBoxBLAKE2spUser
             // 
@@ -380,36 +402,23 @@ namespace Checksum_Comparator
             this.textBoxFileDir.DragDrop += new System.Windows.Forms.DragEventHandler(this.FileDirDragDrop);
             this.textBoxFileDir.DragOver += new System.Windows.Forms.DragEventHandler(this.FileDirDragOver);
             // 
-            // label1
+            // progressBarSevenZip
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(13, 58);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(115, 30);
-            this.label1.TabIndex = 42;
-            this.label1.Text = "Calculated";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(408, 58);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 30);
-            this.label2.TabIndex = 43;
-            this.label2.Text = "Given";
+            this.progressBarSevenZip.Location = new System.Drawing.Point(18, 369);
+            this.progressBarSevenZip.Name = "progressBarSevenZip";
+            this.progressBarSevenZip.Size = new System.Drawing.Size(771, 14);
+            this.progressBarSevenZip.TabIndex = 44;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 368);
+            this.ClientSize = new System.Drawing.Size(800, 395);
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Checksum Comparator V1.1.2 By TDL3";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
@@ -448,6 +457,7 @@ namespace Checksum_Comparator
         private System.Windows.Forms.RichTextBox richTextBoxCRC32User;
         private Label label2;
         private Label label1;
+        private ProgressBar progressBarSevenZip;
     }
 }
 
